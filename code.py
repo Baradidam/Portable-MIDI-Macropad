@@ -26,11 +26,11 @@ macropad.pixels.fill(key_color)
 mode = 0
 mode_text = [
     "Key Color", ("Custom #%s" % (CC_NUM)),
-      "Pitch Bend", "Custom + Bend", "Transpose", "Choose Scale"]  # initial text onscreen for each modes
-midi_values = [0, 16, 8, 0, 48, 0]  # plus no. to start position
+      "Pitch Bend", "Custom + Bend", "Transpose", "Choose Key", "Choose Scale"]  # initial text onscreen for each modes
+midi_values = [0, 16, 8, 0, 48, 3, 0]  # plus no. to start position
 
 # --- Display text setup ---
-text_lines = macropad.display_text("GYARB 5 MIDI Macropad")
+text_lines = macropad.display_text("Portable MIDI Macropad")
 text_lines[0].text = "Mode: Key Color".format(midi_values[0]+1)  # Patch display offset by 1
 text_lines[1].text = "Press knob for modes"
 text_lines.show()
@@ -172,7 +172,7 @@ while True:
 
     macropad.encoder_switch_debounced.update()      # check the knob switch for press or release
     if macropad.encoder_switch_debounced.pressed:   # check knob switch for press
-        mode = (mode+1) % 6 # total modes is 6      # text if mode is selected
+        mode = (mode+1) % 7 # total modes is 7      # text if mode is selected
         if mode == 0:   
             text_lines[0].text = ("Mode: %s %d" % (mode_text[mode], midi_values[mode]+1))
         elif mode == 1:
@@ -183,6 +183,8 @@ while True:
             text_lines[0].text = ("Mode: Custom + Bend")
         elif mode == 4:
             text_lines[0].text = ("Mode: %s %d" % (mode_text[mode], midi_values[mode]-48))
+        elif mode == 5:
+            text_lines[0].text = ("Mode: %s %d" % (mode_text[mode], midi_values[mode]-3))
         else:
             text_lines[0].text = ("Mode: Choose Scale")
         macropad.red_led = macropad.encoder_switch 
@@ -220,7 +222,15 @@ while True:
             text_lines[0].text = ("Mode: %s %d" % (mode_text[mode], midi_values[mode]-48))
             midi_notes = [midi_values[mode] + i for i in range(12)]
 
-        if mode == 5:   # Scale
+        if mode == 5 :  # Key
+            midi_values[mode] = min(max(midi_values[mode] + knob_delta, 0), 11)
+            key_names = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"]
+            midi_notes_offsets = [45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56]
+            
+            text_lines[0].text = f"Choose Key: {key_names[midi_values[mode]]}"
+            midi_notes = [midi_notes_offsets[midi_values[mode]] + i for i in range(12)]
+
+        if mode == 6:   # Scale
             midi_values[mode] = min(max(midi_values[mode] + knob_delta, 0), 6)
             text_lines[1].text = ("Choose Scale")
         # "if" functions that turns off red lights from previous scales and turns off all scaleStates except the one selected
