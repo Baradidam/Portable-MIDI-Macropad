@@ -236,68 +236,42 @@ while True:
         # "if" functions that turns off red lights from previous scales and turns off all scaleStates except the one selected
             if midi_values[mode] == 0: 
                 text_lines[0].text = ("Chromatic Scale")
-                majorState = False
-                minorPentaState = False
-                for i in range(12):
-                    macropad.pixels[i] = key_color # set all pixels to key_color
+                majorState = minorState = majorPentaState = minorPentaState = bluesState = dorianState = False
+                reset()
             elif midi_values[mode] == 1:
                 text_lines[0].text = ("Ionian Scale")
                 majorState = True
-                minorState = False
-                majorPentaState = False
-                minorPentaState = False
-                bluesState = False
-                dorianState = False
+                minorState = majorPentaState = minorPentaState = bluesState = dorianState = False
                 reset()
                 major()
             elif midi_values[mode] == 2:
                 text_lines[0].text = ("Natural Minor Scale")
-                majorState = False
                 minorState = True
-                majorPentaState = False
-                minorPentaState = False
-                bluesState = False
-                dorianState = False
+                majorState = majorPentaState = minorPentaState = bluesState = dorianState = False
                 reset()
                 minor()
             elif midi_values[mode] == 2:
                 text_lines[0].text = ("Major Pentatonic Scale")
-                minorState = False
-                majorState = False
                 majorPentaState = True
-                minorPentaState = False
-                bluesState = False
-                dorianState = False
+                majorState = minorState = minorPentaState = bluesState = dorianState = False
                 reset()
                 majorPenta()
             elif midi_values[mode] == 3:
                 text_lines[0].text = ("Minor Pentatonic Scale")
-                majorState = False
-                minorState = False
-                majorPentaState = False
                 minorPentaState = True
-                bluesState = False
-                dorianState = False
+                majorState = minorState = majorPentaState = bluesState = dorianState = False
                 reset()
                 minorPenta()
             elif midi_values[mode] == 4:
                 text_lines[0].text = ("Blues Scale")
-                majorState = False
-                minorState = False
-                majorPentaState = False
-                minorPentaState = False
                 bluesState = True
-                dorianState = False
+                majorState = minorState = majorPentaState = minorPentaState = dorianState = False
                 reset()
                 blues()
             elif midi_values[mode] == 5:
                 text_lines[0].text = ("Dorian Scale")
-                majorState = False
-                minorState = False
-                majorPentaState = False
-                minorPentaState = False
-                bluesState = False
                 dorianState = True
+                majorState = minorState = majorPentaState = minorPentaState = bluesState = False
                 reset()
                 dorian()
             
